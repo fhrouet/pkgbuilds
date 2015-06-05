@@ -1,0 +1,42 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+pkgname=scalapack
+pkgver=2.0.2
+pkgrel=1
+pkgdesc="ScaLAPACK library"
+arch=('i686' 'x86_64')
+url="http://www.netlib.org/scalapack/"
+license=('BSD')
+depends=('glibc' 'openmpi' 'blas' 'lapack')
+makedepends=()
+provides=('scalapack pblas blacs')
+conflicts=('scalapack pblas blacs')
+source=(http://www.netlib.org/scalapack/$pkgname-$pkgver.tgz)
+sha256sums=('0c74aeae690fe5ee4db7926f49c5d0bb69ce09eea75beb915e00bba07530395c')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  mv SLmake.inc.example SLmake.inc
+
+  sed -i "s/\<CFLAGS\>/CCFLAGS/" SRC/Makefile
+
+  make -j1 lib FCFLAGS="-O3 -fPIC" CCFLAGS="-O3 -fPIC"
+
+  mkdir tmp
+  cd tmp
+  ar x ../libscalapack.a
+  gcc -shared -o ../libscalapack.so *
+}
+
+package(){
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  mkdir ${pkgdir}/usr
+
+  mkdir ${pkgdir}/usr/lib
+  cp libscalapack.so ${pkgdir}/usr/lib
+
+  mkdir ${pkgdir}/usr/include
+  cp PBLAS/SRC/*.h ${pkgdir}/usr/include
+  cp BLACS/SRC/*.h ${pkgdir}/usr/include
+}
