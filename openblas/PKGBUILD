@@ -1,0 +1,39 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=openblas
+_pkgname=OpenBLAS
+pkgver=0.2.14
+pkgrel=1
+pkgdesc="Optimized BLAS+LAPACK library"
+arch=('i686' 'x86_64')
+url="http://xianyi.github.com/OpenBLAS/"
+license=('BSD')
+depends=('gcc-libs')
+makedepends=('perl' 'gcc-fortran')
+provides=('openblas' 'blas=3.5.0' 'lapack=3.5.0' 'cblas=3.5.0')
+conflicts=('openblas' 'blas' 'lapack' 'cblas')
+source=(https://github.com/xianyi/OpenBLAS/archive/v${pkgver}.tar.gz)
+sha256sums=('2411c4f56f477b42dff54db2b7ffc0b7cf53bb9778d54982595c64cc69c40fc1')
+
+build() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  make USE_OPENMP=1
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  make PREFIX=/usr DESTDIR="${pkgdir}" install
+
+  # libblas, liblapack, libcblas all point to libopenblas
+  cd "${pkgdir}/usr/lib/"
+  ln -sf libopenblas.so libblas.so
+  ln -sf libopenblas.so libblas.so.3
+  ln -sf libopenblas.so libblas.so.3.5.0
+  ln -sf libopenblas.so libcblas.so
+  ln -sf libopenblas.so liblapack.so
+  ln -sf libopenblas.so liblapack.so.3
+  ln -sf libopenblas.so liblapack.so.3.5.0
+  rm -rf cmake
+}
