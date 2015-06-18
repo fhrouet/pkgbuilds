@@ -7,7 +7,6 @@ arch=('i686' 'x86_64')
 url="http://www.netlib.org/scalapack/"
 license=('BSD')
 depends=('glibc' 'openmpi' 'blas' 'lapack')
-makedepends=()
 provides=('scalapack pblas blacs')
 conflicts=('scalapack pblas blacs')
 source=(http://www.netlib.org/scalapack/$pkgname-$pkgver.tgz)
@@ -31,12 +30,12 @@ build() {
 package(){
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  mkdir ${pkgdir}/usr
+  mkdir -p ${pkgdir}/usr
 
-  mkdir ${pkgdir}/usr/lib
+  mkdir -p ${pkgdir}/usr/lib
   cp libscalapack.so ${pkgdir}/usr/lib
 
-  mkdir ${pkgdir}/usr/include
+  mkdir -p ${pkgdir}/usr/include
   cp PBLAS/SRC/*.h ${pkgdir}/usr/include
   cp BLACS/SRC/*.h ${pkgdir}/usr/include
 }
