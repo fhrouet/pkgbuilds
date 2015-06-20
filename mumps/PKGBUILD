@@ -1,0 +1,92 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=mumps
+_pkgname=MUMPS
+pkgver=5.0.0
+pkgrel=1
+pkgdesc="Parallel sparse direct solver"
+arch=('i686' 'x86_64')
+url="http://mumps.enseeiht.fr"
+license=('custom')
+depends=('openmpi')
+provides=('mumps' 'pord')
+source=(http://mumps.enseeiht.fr/${_pkgname}_${pkgver}.tar.gz)
+sha256sums=('191ec4b3ea8c4b5955279a9c03e469be49cb75c9ed672b85fd68623dcef52019')
+
+
+build() {
+  cd "${srcdir}/${_pkgname}_${pkgver}"
+
+  cat > Makefile.inc <<"  EOF"
+    LPORDDIR = $(topdir)/PORD/lib/
+    IPORD    = -I$(topdir)/PORD/include/
+    LPORD    = -L$(LPORDDIR) -lpord
+    
+    LSCOTCH   = -lesmumps -lscotch -lscotcherr
+    LPTSCOTCH = -lptesmumps -lptscotch -lptscotcherr -lscotch
+    
+    LMETIS    = -lmetis
+    LPARMETIS = -lparmetis
+    
+    ORDERINGSF = -Dscotch -Dmetis -Dpord -Dptscotch -Dparmetis
+    ORDERINGSC = $(ORDERINGSF)
+    
+    IORDERINGSF =
+    IORDERINGSC = $(IPORD)
+    
+    LSCALAPACK   = -lscalapack
+    LBLASLAPACK = -lblas
+    
+    LIBS = $(LPORD) $(LPARMETIS) $(LMETIS) $(LPTSCOTCH) $(LSCOTCH) $(LSCALAPACK) $(LBLASLAPACK)
+    
+    LIBEXT  = .a
+    OUTC    = -o 
+    OUTF    = -o 
+    RM      = /bin/rm -f
+    CC      = mpicc
+    FC      = mpif90
+    FL      = mpif90
+    AR      = ar vr 
+    RANLIB  = ranlib
+    
+    CDEFS = -DAdd_
+    
+    OPTF    = -O3 -fPIC
+    OPTC    = -O3 -fPIC
+    OPTL    = -O3 -fPIC
+    
+    LIBSEQNEEDED = 
+  EOF
+
+  make alllib
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}_${pkgver}"
+
+  mkdir -p ${pkgdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+  cd lib
+  mkdir -p tmp
+  cd tmp
+  ar x ../libpord.a
+  gcc -shared -o ../libpord.so *
+  rm *
+  ar x ../libmumps_common.a
+  gcc -shared -o ../libmumps_common.so *
+  rm *
+  for i in s d c z
+  do
+    ar x ../lib${i}mumps.a  
+    gcc -shared -o ../lib${i}mumps.so *
+    rm *
+  done
+  cd ..
+  cp *.so ${pkgdir}/usr/lib
+
+  mkdir -p ${pkgdir}/usr/include
+  cd ../include
+  cp *.h ${pkgdir}/usr/include
+}
+
