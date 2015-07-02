@@ -1,7 +1,7 @@
 # Maintainer: fhrouet <fhrouet [at] msn [dot] com>
 pkgname=scalapack
 pkgver=2.0.2
-pkgrel=1
+pkgrel=9
 pkgdesc="ScaLAPACK library"
 arch=('i686' 'x86_64')
 url="http://www.netlib.org/scalapack/"
