@@ -1,0 +1,44 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=papi
+pkgver=5.4.1
+pkgrel=1
+pkgdesc="Performance Application Programming Interface"
+arch=('i686' 'x86_64')
+url="http://icl.cs.utk.edu/papi/index.html"
+license=('BSD')
+depends=('glibc' 'linux-api-headers' 'gcc-fortran')
+provides=('papi')
+source=(http://icl.cs.utk.edu/projects/papi/downloads/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('e131c1449786fe870322a949e44f974a5963824f683232e653fb570cc65d4e87')
+
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}/src
+
+  ./configure
+
+  make -j1
+
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"/src
+
+  mkdir -p ${pkgdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+  cp libpapi.so.${pkgver}.0 ${pkgdir}/usr/lib
+  ln -sf libpapi.so.${pkgver}.0 ${pkgdir}/usr/lib/libpapi.so
+  cp libpfm4/lib/libpfm.so ${pkgdir}/usr/lib
+
+  mkdir -p ${pkgdir}/usr/include
+  cp f77papi.h f90papi.h fpapi.h papi.h papiStdEventDefs.h ${pkgdir}/usr/include 
+  chmod 644 ${pkgdir}/usr/include/*
+
+  mkdir -p ${pkgdir}/usr/share
+  mkdir -p ${pkgdir}/usr/share/papi
+  cp papi_events.csv ${pkgdir}/usr/share/papi/papi_events.csv
+  chmod 644 ${pkgdir}/usr/share/papi/papi_events.csv
+
+}
