@@ -8,6 +8,7 @@ Arch Linux pkgbuilds for some scientific packages:
  - SuperLU_DIST 4.0
  - FFTW         3.3.4
  - PETSc        3.5.4
+ - PAPI         5.4.1
 
 Notes:
  - OpenBLAS is compiled with USE_OPENMP=1. It provides both lapack and blas.
@@ -37,3 +38,5 @@ Links:
                  http://www.fftw.org/fftw-3.3.4.tar.gz
  - PETSc         http://www.mcs.anl.gov/petsc/
                  http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.5.4.tar.gz
+ - PAPI          http://icl.cs.utk.edu/papi/index.html
+                 http://icl.cs.utk.edu/projects/papi/downloads/papi-5.4.1.tar.gz
