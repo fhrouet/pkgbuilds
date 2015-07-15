@@ -1,0 +1,36 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=fftw
+pkgver=3.3.4
+pkgrel=1
+pkgdesc="Fastest Fourier Transform in the West"
+arch=('i686' 'x86_64')
+url="http://www.fftw,org"
+license=('GPL')
+depends=('openmpi')
+makedepends=('gcc-fortran')
+provides=('fftw' 'fftw-mpi')
+source=(http://www.fftw.org/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('8f0cde90929bc05587c3368d2f15cd0530a60b8a9912a8e2979a72dbe5af0982')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  ./configure --enable-shared --enable-threads --enable-mpi --enable-openmp
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${srcdir}/${pkgname}-${pkgver}/tmp" install
+
+  mkdir -p ${pkdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+  cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
+
+  mkdir -p ${pkgdir}/usr/include
+  cp tmp/usr/local/include/* ${pkgdir}/usr/include
+}
