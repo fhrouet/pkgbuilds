@@ -1,0 +1,52 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=petsc
+pkgver=3.6.0
+pkgrel=1
+pkgdesc="Portable, Extensible Toolkit for Scientific Computation"
+arch=('i686' 'x86_64')
+url="http://www.mcs.anl.gov/petsc/"
+license=('BSD')
+depends=('openmpi' 'openblas' 'scalapack' 'parmetis' 'ptscotch' 'mumps' 'papi')
+makedepends=('gcc' 'gcc-fortran' 'cmake')
+provides=('petsc')
+source=(http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/${pkgname}-lite-${pkgver}.tar.gz)
+sha256sums=('46e44b56f9f163e692c71b35f5d6b9b6746ab3484b7c4879d0f3eb475d98f053')
+
+export MAKEFLAGS="-j1"
+arch_name="linux-gnu-double"
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  sed -i "s/libperfctr.a//" config/BuildSystem/config/packages/papi.py
+  
+  python2 ./configure PETSC_ARCH="${arch_name}" --with-papi --with-mumps --with-fftw --with-scalapack --with-openmp --with-ptscotch --with-parmetis --with-metis --with-shared-libraries=1
+  
+  mpi_major_version=`grep OMPI_MAJOR_VERSION /usr/include/mpi.h | awk '{print $3}'`
+  mpi_minor_version=`grep OMPI_MINOR_VERSION /usr/include/mpi.h | awk '{print $3}'`
+  mpi_release_version=`grep OMPI_RELEASE_VERSION /usr/include/mpi.h | awk '{print $3}'`
+  
+  sed -i "s/#define PETSC_HAVE_OMPI_MAJOR_VERSION unknown/#define PETSC_HAVE_OMPI_MAJOR_VERSION ${mpi_major_version}/" ${arch_name}/include/petscconf.h
+  sed -i "s/#define PETSC_HAVE_OMPI_MINOR_VERSION unknown/#define PETSC_HAVE_OMPI_MINOR_VERSION ${mpi_minor_version}/" ${arch_name}/include/petscconf.h
+  sed -i "s/#define PETSC_HAVE_OMPI_RELEASE_VERSION unknown/#define PETSC_HAVE_OMPI_RELEASE_VERSION ${mpi_release_version}/" ${arch_name}/include/petscconf.h
+  
+  make PETSC_DIR="${srcdir}/${pkgname}-${pkgver}" PETSC_ARCH=${arch_name} all
+
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  mkdir -p ${pkgdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+  cp -a ${arch_name}/lib/libpetsc* ${pkgdir}/usr/lib
+
+  mkdir -p ${pkgdir}/usr/include
+  cp ${arch_name}/include/* ${pkgdir}/usr/include
+  cp include/*.h ${pkgdir}/usr/include
+
+  # Remove warning
+  sed -i "s+${srcdir}/${pkgname}-${pkgver}+/usr+g" ${pkgdir}/usr/include/* 
+}
