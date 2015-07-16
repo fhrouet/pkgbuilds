@@ -21,11 +21,13 @@ build() {
 
   make
 
+  # Build a shared library for METIS (only PARMETIS has one);
+  # util.c.o is added for the gk_log2 function
   cd build/Linux-$CARCH/libmetis
   mkdir -p tmp
   cd tmp
   ar x ../libmetis.a
-  gcc -shared -o ../libmetis.so *
+  gcc -shared -o ../libmetis.so * ../CMakeFiles/metis.dir/__/GKlib/util.c.o
 }
 
 package() {
