@@ -7,7 +7,7 @@ Arch Linux pkgbuilds for some scientific packages:
  - MUMPS        5.0.0
  - SuperLU_DIST 4.0
  - FFTW         3.3.4
- - PETSc        3.5.4
+ - PETSc        3.6.0
  - PAPI         5.4.1
 
 Notes:
