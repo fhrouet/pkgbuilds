@@ -14,29 +14,49 @@ source=(http://www.fftw.org/${pkgname}-${pkgver}.tar.gz)
 sha256sums=('8f0cde90929bc05587c3368d2f15cd0530a60b8a9912a8e2979a72dbe5af0982')
 
 build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
 
+  cp -a ${srcdir}/${pkgname}-${pkgver} ${srcdir}/${pkgname}-${pkgver}-single
+  cp -a ${srcdir}/${pkgname}-${pkgver} ${srcdir}/${pkgname}-${pkgver}-quad
+  mv ${srcdir}/${pkgname}-${pkgver} ${srcdir}/${pkgname}-${pkgver}-double
+
+  # Build single precision
+  cd ${srcdir}/${pkgname}-${pkgver}-single
+  ./configure --enable-shared --enable-threads --enable-mpi --enable-openmp --enable-float
+  make
+
+  # Build double precision
+  cd ${srcdir}/${pkgname}-${pkgver}-double
   ./configure --enable-shared --enable-threads --enable-mpi --enable-openmp
+  make
 
+  # Build quad precision
+  cd ${srcdir}/${pkgname}-${pkgver}-quad
+  ./configure --enable-shared --enable-threads --enable-mpi --enable-openmp --enable-long-double
   make
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  make DESTDIR="${srcdir}/${pkgname}-${pkgver}/tmp" install
-
   mkdir -p ${pkdir}/usr
-
   mkdir -p ${pkgdir}/usr/lib
-  cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
-  cd ${pkgdir}/usr/lib
-  ln -s libfftw3.so libfftw3f.so.3
-  ln -s libfftw3_mpi.so libfftw3f_mpi.so.3
-  ln -s libfftw3_omp.so libfftw3f_omp.so.3
-  ln -s libfftw3_threads.so libfftw3f_threads.so.3
-
-  cd "${srcdir}/${pkgname}-${pkgver}"
   mkdir -p ${pkgdir}/usr/include
+
+  
+  # Single precision libraries
+  cd "${srcdir}/${pkgname}-${pkgver}-single"
+  make DESTDIR="${srcdir}/${pkgname}-${pkgver}-single/tmp" install
+  cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
+
+  # Double precision libraries
+  cd "${srcdir}/${pkgname}-${pkgver}-double"
+  make DESTDIR="${srcdir}/${pkgname}-${pkgver}-double/tmp" install
+  cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
+
+  # Quad precision libraries
+  cd "${srcdir}/${pkgname}-${pkgver}-quad"
+  make DESTDIR="${srcdir}/${pkgname}-${pkgver}-quad/tmp" install
+  cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
+
+  # Headers (from any of the three folders)
+  cd "${srcdir}/${pkgname}-${pkgver}-double"
   cp tmp/usr/local/include/* ${pkgdir}/usr/include
 }
