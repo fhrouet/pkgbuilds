@@ -30,7 +30,13 @@ package() {
 
   mkdir -p ${pkgdir}/usr/lib
   cp tmp/usr/local/lib/*.so ${pkgdir}/usr/lib
+  cd ${pkgdir}/usr/lib
+  ln -s libfftw3.so libfftw3f.so.3
+  ln -s libfftw3_mpi.so libfftw3f_mpi.so.3
+  ln -s libfftw3_omp.so libfftw3f_omp.so.3
+  ln -s libfftw3_threads.so libfftw3f_threads.so.3
 
+  cd "${srcdir}/${pkgname}-${pkgver}"
   mkdir -p ${pkgdir}/usr/include
   cp tmp/usr/local/include/* ${pkgdir}/usr/include
 }
