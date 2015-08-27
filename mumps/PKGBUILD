@@ -2,16 +2,16 @@
 
 pkgname=mumps
 _pkgname=MUMPS
-pkgver=5.0.0
+pkgver=5.0.1
 pkgrel=1
 pkgdesc="Parallel sparse direct solver"
 arch=('i686' 'x86_64')
 url="http://mumps.enseeiht.fr"
 license=('custom')
-depends=('openmpi')
+depends=('openmpi' 'parmetis' 'ptscotch')
 provides=('mumps' 'pord')
 source=(http://mumps.enseeiht.fr/${_pkgname}_${pkgver}.tar.gz)
-sha256sums=('191ec4b3ea8c4b5955279a9c03e469be49cb75c9ed672b85fd68623dcef52019')
+sha256sums=('50355b2e67873e2239b4998a46f2bbf83f70cdad6517730ab287ae3aae9340a0')
 
 
 build() {
@@ -44,8 +44,8 @@ build() {
     OUTF    = -o 
     RM      = /bin/rm -f
     CC      = mpicc
-    FC      = mpif90
-    FL      = mpif90
+    FC      = mpifort
+    FL      = mpifort
     AR      = ar vr 
     RANLIB  = ranlib
     

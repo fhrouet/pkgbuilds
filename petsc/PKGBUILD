@@ -1,7 +1,7 @@
 # Maintainer: fhrouet <fhrouet [at] msn [dot] com>
 
 pkgname=petsc
-pkgver=3.6.0
+pkgver=3.6.1
 pkgrel=1
 pkgdesc="Portable, Extensible Toolkit for Scientific Computation"
 arch=('i686' 'x86_64')
@@ -11,7 +11,7 @@ depends=('openmpi' 'openblas' 'scalapack' 'parmetis' 'ptscotch' 'mumps' 'papi')
 makedepends=('gcc' 'gcc-fortran' 'cmake')
 provides=('petsc')
 source=(http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/${pkgname}-lite-${pkgver}.tar.gz)
-sha256sums=('46e44b56f9f163e692c71b35f5d6b9b6746ab3484b7c4879d0f3eb475d98f053')
+sha256sums=('aeac101565a4ba609c3f3f13ada475720bcd32a44676e3cbfe792da1c9fb32a2')
 
 export MAKEFLAGS="-j1"
 arch_name="linux-gnu-double"
@@ -21,7 +21,7 @@ build() {
 
   sed -i "s/libperfctr.a//" config/BuildSystem/config/packages/papi.py
   
-  python2 ./configure PETSC_ARCH="${arch_name}" --with-papi --with-mumps --with-fftw --with-scalapack --with-openmp --with-ptscotch --with-parmetis --with-metis --with-shared-libraries=1
+  python2 ./configure PETSC_DIR="${srcdir}/${pkgname}-${pkgver}" PETSC_ARCH="${arch_name}" --with-papi --with-mumps --with-fftw --with-scalapack --with-openmp --with-ptscotch --with-parmetis --with-metis --with-shared-libraries=1
   
   mpi_major_version=`grep OMPI_MAJOR_VERSION /usr/include/mpi.h | awk '{print $3}'`
   mpi_minor_version=`grep OMPI_MINOR_VERSION /usr/include/mpi.h | awk '{print $3}'`

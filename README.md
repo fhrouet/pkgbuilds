@@ -4,10 +4,10 @@ Arch Linux pkgbuilds for some scientific packages:
  - ScaLAPACK    2.0.2 
  - Scotch       6.0.4
  - ParMETIS     4.0.3
- - MUMPS        5.0.0
- - SuperLU_DIST 4.0
+ - MUMPS        5.0.1
+ - SuperLU_DIST 4.1
  - FFTW         3.3.4
- - PETSc        3.6.0
+ - PETSc        3.6.1
  - PAPI         5.4.1
 
 Notes:
@@ -31,12 +31,12 @@ Links:
  - ParMETIS      http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview
                  http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz
  - MUMPS         http://mumps.enseeiht.fr
-                 http://mumps.enseeiht.fr/MUMPS_5.0.0.tar.gz
+                 http://mumps.enseeiht.fr/MUMPS_5.0.1.tar.gz
  - SuperLU_DIST  http://crd-legacy.lbl.gov/~xiaoye/SuperLU/#superlu_dist
-                 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_4.0.tar.gz
+                 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_4.1.tar.gz
  - FFTW          http://www.fftw.org
                  http://www.fftw.org/fftw-3.3.4.tar.gz
  - PETSc         http://www.mcs.anl.gov/petsc/
-                 http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.5.4.tar.gz
+                 http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.6.1.tar.gz
  - PAPI          http://icl.cs.utk.edu/papi/index.html
                  http://icl.cs.utk.edu/projects/papi/downloads/papi-5.4.1.tar.gz
