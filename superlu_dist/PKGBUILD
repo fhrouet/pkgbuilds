@@ -1,0 +1,74 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=superlu_dist
+_pkgname=SuperLU_DIST
+pkgver=4.1
+pkgrel=1
+pkgdesc="Parallel sparse direct solver"
+arch=('i686' 'x86_64')
+url="http://crd-legacy.lbl.gov/~xiaoye/SuperLU/"
+license=('custom')
+depends=('openmpi' 'parmetis')
+provides=('superlu_dist')
+source=(http://crd-legacy.lbl.gov/~xiaoye/SuperLU/${pkgname}_${pkgver}.tar.gz)
+sha256sums=('8afb48036e9b3020d268d49d5a3711aaed2f65105747aa6a111ff8f64dcde93e')
+
+
+build() {
+  cd "${srcdir}/${_pkgname}_${pkgver}"
+
+  cat > make.inc <<"  EOF"
+    PLAT  =
+    
+    DSUPERLULIB  = ../lib/libsuperlu_dist_4.0.a
+    
+    BLASDEF      = -DUSE_VENDOR_BLAS
+    BLASLIB      = -lscalapack -lblas -fopenmp
+    
+    ARCH         = ar
+    ARCHFLAGS    = cr
+    RANLIB       = ranlib
+    
+    CC           = mpicc
+    CFLAGS       = -std=c99 -O3 -fPIC -fopenmp -DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 # -D_LONGINT 
+    
+    NOOPTS       = -O0 -fPIC
+    
+    FORTRAN      = mpifort
+    F90FLAGS     = -O3 -fPIC
+    
+    LOADER       = /usr/bin/mpicc
+    LOADOPTS     = -O3 -fPIC -fopenmp
+    
+    CDEFS        = -DAdd_
+  EOF
+
+  make lib
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}_${pkgver}"
+
+  mkdir -p ${pkgdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+  cd lib
+  mkdir -p tmp
+  cd tmp
+  ar x ../libsuperlu_dist*.a
+  rm *MM*
+  gcc -shared -o ../libsuperlu_dist_complex.so dcomplex.o pz* z*
+  rm dcomplex.o pz* z*
+  gcc -shared -o ../libsuperlu_dist_real.so pd* d*
+  rm pd* d*
+  gcc -shared -o ../libsuperlu_dist_common.so *
+  rm *
+  cd ..
+  cp *.so ${pkgdir}/usr/lib
+
+  mkdir -p ${pkgdir}/usr/include
+  cd ../SRC
+  chmod a+r *.h
+  cp Cnames.h dcomplex.h psymbfact.h superlu_ddefs.h superlu_defs.h superlu_enum_consts.h superlu_zdefs.h supermatrix.h util_dist.h  ${pkgdir}/usr/include
+}
+
