@@ -18,17 +18,29 @@ build() {
 
   cd BLAS/SRC/
   rm xerbla*
-  gfortran -c -g -O0 -fPIC *.f
+  gfortran -c -ggdb -fPIC *.f
 
   cd ../../SRC
+  cat > xerbla.f <<"  EOF"
+      SUBROUTINE XERBLA( SRNAME, INFO )
+      CHARACTER*(*)      SRNAME
+      INTEGER            INFO
+      INTEGER            TMP(1)
+      INTRINSIC          LEN_TRIM
+      WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
+      TMP(-99999)=TMP(99999)
+ 9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
+     $      'an illegal value' )
+      END
+  EOF
   rm *fsx.f *vxx.f *extended.f # Remove stuff referencing XBLAS
-  gfortran -c -g -O0 -fPIC *.f
+  gfortran -c -ggdb -fPIC *.f
 
   cd ../INSTALL
-  gfortran -c -g -O0 -fPIC dlamch.f slamch.f
+  gfortran -c -ggdb -fPIC dlamch.f slamch.f
 
   cd ..
-  gcc -shared -o liblapackblasref.so BLAS/SRC/*.o SRC/*.o INSTALL/*.o
+  gcc -ggdb -shared -o liblapackblasref.so BLAS/SRC/*.o SRC/*.o INSTALL/*.o
 }
 
 package() {
