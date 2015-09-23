@@ -1,0 +1,40 @@
+# Maintainer: fhrouet <fhrouet [at] msn [dot] com>
+
+pkgname=lapackblasref	
+_pkgname=LAPACKBLASRef
+pkgver=3.5.0
+pkgrel=1
+pkgdesc="Reference BLAS+LAPACK library, debug mode"
+arch=('i686' 'x86_64')
+url="http://www.netlib.org/lapack/"
+license=('BSD')
+depends=('gcc-libs')
+makedepends=('gcc-fortran')
+source=(http://www.netlib.org/lapack/lapack-3.5.0.tgz)
+sha256sums=('9ad8f0d3f3fb5521db49f2dd716463b8fb2b6bc9dc386a9956b8c6144f726352')
+
+build() {
+  cd ${srcdir}/lapack-3.5.0
+
+  cd BLAS/SRC/
+  rm xerbla*
+  gfortran -c -g -O0 -fPIC *.f
+
+  cd ../../SRC
+  rm *fsx.f *vxx.f *extended.f # Remove stuff referencing XBLAS
+  gfortran -c -g -O0 -fPIC *.f
+
+  cd ../INSTALL
+  gfortran -c -g -O0 -fPIC dlamch.f slamch.f
+
+  cd ..
+  gcc -shared -o liblapackblasref.so BLAS/SRC/*.o SRC/*.o INSTALL/*.o
+}
+
+package() {
+  mkdir -p ${pkgdir}/usr
+
+  mkdir -p ${pkgdir}/usr/lib
+
+  cp ${srcdir}/lapack-3.5.0/liblapackblasref.so ${pkgdir}/usr/lib
+}
