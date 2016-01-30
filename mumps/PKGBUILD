@@ -58,7 +58,7 @@ build() {
     LIBSEQNEEDED = 
   EOF
 
-  make alllib
+  make -j1 alllib
 }
 
 package() {

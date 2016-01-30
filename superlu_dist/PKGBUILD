@@ -2,7 +2,7 @@
 
 pkgname=superlu_dist
 _pkgname=SuperLU_DIST
-pkgver=4.1
+pkgver=4.3
 pkgrel=1
 pkgdesc="Parallel sparse direct solver"
 arch=('i686' 'x86_64')
@@ -11,7 +11,7 @@ license=('custom')
 depends=('openmpi' 'parmetis')
 provides=('superlu_dist')
 source=(http://crd-legacy.lbl.gov/~xiaoye/SuperLU/${pkgname}_${pkgver}.tar.gz)
-sha256sums=('8afb48036e9b3020d268d49d5a3711aaed2f65105747aa6a111ff8f64dcde93e')
+sha256sums=('daffdb64386c7d970d7f591d0be3cd3441e60bc3453365b0badfd364d2452db2')
 
 
 build() {
@@ -57,8 +57,8 @@ package() {
   cd tmp
   ar x ../libsuperlu_dist*.a
   rm *MM*
-  gcc -shared -o ../libsuperlu_dist_complex.so dcomplex.o pz* z*
-  rm dcomplex.o pz* z*
+  gcc -shared -o ../libsuperlu_dist_complex.so dcomplex_dist.o pz* z*
+  rm dcomplex_dist.o pz* z*
   gcc -shared -o ../libsuperlu_dist_real.so pd* d*
   rm pd* d*
   gcc -shared -o ../libsuperlu_dist_common.so *

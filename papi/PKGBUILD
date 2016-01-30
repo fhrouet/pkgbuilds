@@ -1,7 +1,7 @@
 # Maintainer: fhrouet <fhrouet [at] msn [dot] com>
 
 pkgname=papi
-pkgver=5.4.1
+pkgver=5.4.3
 pkgrel=1
 pkgdesc="Performance Application Programming Interface"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ license=('BSD')
 depends=('glibc' 'linux-api-headers' 'gcc-fortran')
 provides=('papi')
 source=(http://icl.cs.utk.edu/projects/papi/downloads/${pkgname}-${pkgver}.tar.gz)
-sha256sums=('e131c1449786fe870322a949e44f974a5963824f683232e653fb570cc65d4e87')
+sha256sums=('3aefd581e274f0a103f001f1ffd1009019b297c637e97f4b8c5fc13fa5a1e675')
 
 
 build() {

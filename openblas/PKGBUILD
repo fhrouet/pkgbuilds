@@ -2,7 +2,7 @@
 
 pkgname=openblas
 _pkgname=OpenBLAS
-pkgver=0.2.14
+pkgver=0.2.15
 pkgrel=1
 pkgdesc="Optimized BLAS+LAPACK library"
 arch=('i686' 'x86_64')
@@ -13,7 +13,7 @@ makedepends=('perl' 'gcc-fortran')
 provides=('openblas' 'blas=3.5.0' 'lapack=3.5.0' 'cblas=3.5.0')
 conflicts=('openblas' 'blas' 'lapack' 'cblas')
 source=(http://github.com/xianyi/OpenBLAS/archive/v${pkgver}.tar.gz)
-sha256sums=('2411c4f56f477b42dff54db2b7ffc0b7cf53bb9778d54982595c64cc69c40fc1')
+sha256sums=('73c40ace5978282224e5e122a41c8388c5a19e65a6f2329c2b7c0b61bacc9044')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"

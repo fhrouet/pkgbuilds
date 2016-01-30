@@ -2,7 +2,7 @@
 
 pkgname=lapackblasref	
 _pkgname=LAPACKBLASRef
-pkgver=3.5.0
+pkgver=3.6.0
 pkgrel=1
 pkgdesc="Reference BLAS+LAPACK library, debug mode"
 arch=('i686' 'x86_64')
@@ -10,11 +10,11 @@ url="http://www.netlib.org/lapack/"
 license=('BSD')
 depends=('gcc-libs')
 makedepends=('gcc-fortran')
-source=(http://www.netlib.org/lapack/lapack-3.5.0.tgz)
-sha256sums=('9ad8f0d3f3fb5521db49f2dd716463b8fb2b6bc9dc386a9956b8c6144f726352')
+source=(http://www.netlib.org/lapack/lapack-${pkgver}.tgz)
+sha256sums=('a9a0082c918fe14e377bbd570057616768dca76cbdc713457d8199aaa233ffc3')
 
 build() {
-  cd ${srcdir}/lapack-3.5.0
+  cd ${srcdir}/lapack-${pkgver}
 
   cd BLAS/SRC/
   rm xerbla*
@@ -48,5 +48,5 @@ package() {
 
   mkdir -p ${pkgdir}/usr/lib
 
-  cp ${srcdir}/lapack-3.5.0/liblapackblasref.so ${pkgdir}/usr/lib
+  cp ${srcdir}/lapack-${pkgver}/liblapackblasref.so ${pkgdir}/usr/lib
 }

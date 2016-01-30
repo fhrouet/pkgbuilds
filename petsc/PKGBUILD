@@ -1,7 +1,7 @@
 # Maintainer: fhrouet <fhrouet [at] msn [dot] com>
 
 pkgname=petsc
-pkgver=3.6.1
+pkgver=3.6.3
 pkgrel=1
 pkgdesc="Portable, Extensible Toolkit for Scientific Computation"
 arch=('i686' 'x86_64')
@@ -11,7 +11,7 @@ depends=('openmpi' 'openblas' 'scalapack' 'parmetis' 'ptscotch' 'mumps' 'papi')
 makedepends=('gcc' 'gcc-fortran' 'cmake')
 provides=('petsc')
 source=(http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/${pkgname}-lite-${pkgver}.tar.gz)
-sha256sums=('aeac101565a4ba609c3f3f13ada475720bcd32a44676e3cbfe792da1c9fb32a2')
+sha256sums=('2458956c876496f3c8160591324459be7c11f2e1ce09ad98347394c67a46d858')
 
 export MAKEFLAGS="-j1"
 arch_name="linux-gnu-double"
