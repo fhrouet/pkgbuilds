@@ -1,14 +1,14 @@
 # pkgbuilds
 Arch Linux pkgbuilds for some scientific packages:
- - OpenBLAS     0.2.14
+ - OpenBLAS     0.2.15
  - ScaLAPACK    2.0.2 
  - Scotch       6.0.4
  - ParMETIS     4.0.3
  - MUMPS        5.0.1
- - SuperLU_DIST 4.1
+ - SuperLU_DIST 4.3
  - FFTW         3.3.4
- - PETSc        3.6.1
- - PAPI         5.4.1
+ - PETSc        3.6.3
+ - PAPI         5.4.3
 
 Notes:
  - OpenBLAS is compiled with USE_OPENMP=1. It provides both lapack and blas.
